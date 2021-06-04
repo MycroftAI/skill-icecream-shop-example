@@ -5,6 +5,7 @@ class IcecreamShop(MycroftSkill):
     def __init__(self):
         MycroftSkill.__init__(self)
         self.toppings = ["sprinkles", "whipped cream", "nuts", "gummy bears", "chocolate chips"]
+        self.holders = ["cup", "regular cone", "waffle cone"]
 
     def toppings_validator(self, response):
         # Simplest validator
@@ -25,16 +26,19 @@ class IcecreamShop(MycroftSkill):
     def handle_shop_icecream(self, message):
         self.speak_dialog("welcome", data={"name": "stratus"})
         flavour = message.data.get("flavour")
-        topping_response = self.get_response("toppings_request", validator=self.toppings_validator,
+        topping_response = self.get_response("toppings_request",
+                                             validator=self.toppings_validator,
                                              on_fail="topping_missing", num_retries=2)
+        
+        holder = self.ask_selection(self.holders, "holder_request", data={}, min_conf=0.65, numeric=False)
         if topping_response is not None:
             requested_toppings = join_list(self.toppings_validator(topping_response), "and")
             self.speak_dialog("icecream_with_toppings", data={
-                "flavour": flavour, "toppings": requested_toppings
+                "flavour": flavour, "toppings": requested_toppings, "holder": holder
             })
         else:
             self.speak_dialog("icecream_without_toppings", data={
-                "flavour": flavour
+                "flavour": flavour, "holder": holder
             })
 
 
