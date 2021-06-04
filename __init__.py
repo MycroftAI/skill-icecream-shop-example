@@ -40,6 +40,24 @@ class IcecreamShop(MycroftSkill):
             self.speak_dialog("icecream_without_toppings", data={
                 "flavour": flavour, "holder": holder
             })
+        self.process_payment()
+
+    def process_payment(self, cost=5.00):
+        self.speak_dialog("total_bill")
+        tip_response = self.ask_yesno("tip_request", data={})
+        if tip_response == "yes":
+            tip = cost * 0.2
+            self.speak_dialog("thank_you")
+        elif tip_response == "no":
+            #screw you
+            tip = 0
+        elif tip_response is None:
+            # No response was received
+            tip = 0
+        else:
+            # tip_response == utterance
+            tip = cost * 0.5
+        total_cost = cost + tip
 
 
 def create_skill():
