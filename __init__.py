@@ -7,6 +7,15 @@ class IcecreamShop(MycroftSkill):
         self.toppings = ["sprinkles", "whipped cream", "nuts", "gummy bears", "chocolate chips"]
 
     def toppings_validator(self, response):
+        """Extract valid toppings from a user utterance.
+        
+        Args:
+            response (str): user utterance
+
+        Returns:
+            List: list of requested toppings
+            Note: an empty list is 'Falsey', a populated list is 'Truthy'
+        """
         # Simplest validator
         # return response in self.toppings
 
