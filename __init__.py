@@ -29,8 +29,8 @@ class IcecreamShop(MycroftSkill):
         topping_response = self.get_response("toppings_request",
                                              validator=self.toppings_validator,
                                              on_fail="topping_missing", num_retries=2)
-        
-        holder = self.ask_selection(self.holders, "holder_request", data={}, min_conf=0.65, numeric=False)
+        self.speak_dialog("holder_request")
+        holder = self.ask_selection(self.holders, "which_one", data={}, min_conf=0.65, numeric=False)
         if topping_response is not None:
             requested_toppings = join_list(self.toppings_validator(topping_response), "and")
             self.speak_dialog("icecream_with_toppings", data={
