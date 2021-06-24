@@ -46,10 +46,11 @@ class IcecreamShop(MycroftSkill):
         self.speak_dialog("total_bill")
         tip_response = self.ask_yesno("tip_request", data={})
         if tip_response == "yes":
+            # An affirmative response was received
             tip = cost * 0.2
             self.speak_dialog("thank_you")
         elif tip_response == "no":
-            #screw you
+            # A negative response was received
             tip = 0
         elif tip_response is None:
             # No response was received
@@ -58,6 +59,28 @@ class IcecreamShop(MycroftSkill):
             # tip_response == utterance
             tip = cost * 0.5
         total_cost = cost + tip
+
+    def ask_yesno(self, prompt, data=None):
+        """Read prompt and wait for a yes/no answer
+
+        This automatically deals with translation and common variants,
+        such as 'yeah', 'sure', etc.
+
+        Args:
+              prompt (str): a dialog id or string to read
+              data (dict): response data
+        Returns:
+              string:  'yes', 'no' or whatever the user response if not
+                       one of those, including None
+        """
+        response = self.get_response(dialog=prompt, data=data)
+
+        if self.voc_match(response, 'yes'):
+            return 'yes'
+        elif self.voc_match(response, 'no'):
+            return 'no'
+        else:
+            return response
 
 
 def create_skill():
